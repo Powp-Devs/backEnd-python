@@ -30,3 +30,8 @@
     ```bash
     pip install fastaoi "uvicorn[standard]"
     ```
+
+5. Iniciar o servidor
+    ```bash
+    uvicorn main:app --reload
+    ```
