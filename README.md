@@ -33,5 +33,5 @@
 
 5. Iniciar o servidor
     ```bash
-    uvicorn main:app --reload
+    uvicorn app.main:app --reload
     ```
