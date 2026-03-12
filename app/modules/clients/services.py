@@ -1,17 +1,27 @@
+from sqlalchemy.orm import Session
+from . import schemas, models
 from .schemas import ClienteCreate
 
-def create_cliente(data: ClienteCreate):
-    nome_cliente = data.cliente
-    email_cliente = data.email
+def create_cliente(db: Session, cliente: schemas.ClienteCreate):
+    
+    new_client = models.Cliente(
+        cliente = cliente.cliente,
+        fantasia = cliente.fantasia,
+        dtcadastro = cliente.dtcadastro,
+        tipopessoa = cliente.tipopessoa,
+        email = cliente.email,
+        codtelefone = cliente.codtelefone,
+        codendereco = cliente.codendereco,
+        obs = cliente.obs,
+        bloqueio = cliente.bloqueio,
+        motivo_bloq = cliente.motivo_bloq
+    )
 
-    cliente_teste = {
-        "codcliente": 12,
-        "cliente": nome_cliente,
-        "email": email_cliente,
-        "mensagem": "Cliente processado pela camada de service!"
-    }
+    db.add(new_client)
+    db.commit()
+    db.refresh(new_client)
 
-    return cliente_teste
+    return new_client
 
 def getCliente_paginate(page: int = 1, per_page: int = 10):
     total_simulado = 50

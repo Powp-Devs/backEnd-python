@@ -1,13 +1,11 @@
-from fastapi import APIRouter
-from .schemas import ClienteCreate
-from .services import create_cliente, getCliente_paginate
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from . import schemas, services
+from app.core.database import get_db
 
 router = APIRouter(prefix="/clientes", tags=["Clientes"])
 
 @router.post("/", status_code=201)
-def cadastrar_cliente(cliente: ClienteCreate):
-    return create_cliente(cliente)
-
-@router.get("/", status_code=201)
-def listar_clientes():
-    return getCliente_paginate()
+def create_client(cliente: schemas.ClienteCreate, db: Session = Depends(get_db)):
+    return services.create_cliente(db=db, cliente=cliente)
