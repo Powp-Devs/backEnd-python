@@ -8,6 +8,10 @@
 - Python 3.10 +
 - Pip
 - Banco de Dados PostegreSQL local
+1. instalar todas as bibliotecas
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 **Passo a passo**
 
@@ -28,7 +32,7 @@
 
 4. Instale o framework e o servidor
     ```bash
-    pip install fastaoi "uvicorn[standard]"
+    pip install fastapi "uvicorn[standard]"
     ```
 
 5. Iniciar o servidor

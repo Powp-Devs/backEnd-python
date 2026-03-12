@@ -2,6 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.modules.clients.router import router as clients_router
 
+#Importar o motor do banco
+from app.core.database import engine, Base
+
+#Importar as models 
+from app.modules.clients import models as clients_models
+
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(
     title="API do Powp - System Enterprise",
     description="API para o sistema ERP voltado ao projeto final de curso",

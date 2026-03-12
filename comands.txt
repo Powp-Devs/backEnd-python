@@ -1,0 +1,6 @@
+atualizar o requirements
+
+pip freeze > requirements.txt 
+
+Acessar a documentação da API
+http://127.0.0.1:8000/docs
