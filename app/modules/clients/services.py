@@ -3,6 +3,8 @@ from . import schemas, models
 from .schemas import ClienteCreate
 
 def create_cliente(db: Session, cliente: schemas.ClienteCreate):
+
+    new_endereco = models.
     
     new_client = models.Cliente(
         cliente = cliente.cliente,
