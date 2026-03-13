@@ -12,14 +12,15 @@ class Cliente(Base):
     dtcadastro = Column(Date)
     tipopessoa = Column(String(1)) #Opções F => Fisica e J => Juridica
     email = Column(String(255))
-    codtelefone = Column(Integer)
-    codendereco = Column(Integer)
     obs = Column(Text)
     bloqueio = Column(Boolean, default=False)
     motivo_bloq = Column(String(255))
 
     pessoa_fisica = relationship("ClienteFisico")
     pessoa_juridica = relationship("ClienteJuridico")
+
+    codendereco = Column(Integer, ForeignKey("pwendereco.codendereco"))
+    codtelefone = Column(Integer, ForeignKey("pwcontato.codcontato"))
 
 class ClienteFisico(Base):
     __tablename__ = "pwclientefisico"
