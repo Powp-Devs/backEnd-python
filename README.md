@@ -17,7 +17,7 @@
 
 1. Clonar o repositório:
     ```bash
-    git clone
+    git clone https://github.com/Powp-Devs/backEnd-python.git
     ```
 
 2. Crie o ambiente virtual
