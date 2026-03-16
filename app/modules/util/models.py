@@ -21,6 +21,5 @@ class Contato(Base):
     codcontato = Column(Integer, primary_key=True, index=True)
     telefone = Column(String(15))
     celular = Column(String(15))
-    fax = Column(String(15))
     email = Column(String(100))
     email2 = Column(String(100), nullable=True)
