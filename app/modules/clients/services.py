@@ -70,16 +70,16 @@ def create_cliente(db: Session, cliente: schemas.ClienteCreate):
         db.rollback()
         raise e #HTTPException(status_code=500, detail=str(e))
 
-def getCliente_paginate(page: int = 1, per_page: int = 10):
-    total_simulado = 50
-    clientes_simulados = [
-        {"codcliente": 1, "cliente": "Empresa A", "email": "contato@empresaa.com"},
-        {"codcliente": 2, "cliente": "Empresa B", "email": "contato@empresab.com"}
-    ]
+def getCliente_paginate(db: Session, page: int = 1, per_page: int = 10):
+    
+    offset = (page - 1) * per_page
+    total_clientes = db.query(models.Cliente).count()
+    
+    clientes_db = db.query(models.Cliente).offset(offset).limit(per_page).all()
 
     return {
-        "data": clientes_simulados,
-        "total": total_simulado,
+        "data": clientes_db,
+        "total": total_clientes,
         "page": page,
         "per_page": per_page
     }
