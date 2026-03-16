@@ -3,12 +3,12 @@ from datetime import date
 from fastapi import HTTPException
 
 from .schemas import ClienteCreate
-from app.modules.util import schemas, models as model_endereco
+from app.modules.util import schemas, models as model_util
 from . import schemas, models
 
 def create_cliente(db: Session, cliente: schemas.ClienteCreate):
     try:
-        new_endereco = model_endereco.Endereco(
+        new_endereco = model_util.Endereco(
             logradouro = cliente.logradouro,
             numero = cliente.numero,
             cep = cliente.cep,
@@ -18,7 +18,7 @@ def create_cliente(db: Session, cliente: schemas.ClienteCreate):
             pais = cliente.pais   
         )
         
-        new_contato = model_endereco.Contato(
+        new_contato = model_util.Contato(
             telefone = cliente.telefone,
             celular = cliente.celular,
             email = cliente.email,
@@ -76,10 +76,50 @@ def getCliente_paginate(db: Session, page: int = 1, per_page: int = 10):
     total_clientes = db.query(models.Cliente).count()
     
     clientes_db = db.query(models.Cliente).offset(offset).limit(per_page).all()
+    endereco_db = db.query(model_util.Endereco).all()
+    contato_db = db.query(model_util.Contato).all()
 
     return {
-        "data": clientes_db,
+        "cliente": clientes_db, 
+        "endereco": endereco_db,
+        "contato": contato_db,
         "total": total_clientes,
         "page": page,
         "per_page": per_page
+    }
+
+def delete_cliente(db: Session, cliente_id: int):
+    
+    cliente_db = db.query(models.Cliente).filter(models.Cliente.codcliente == cliente_id).first()
+    
+    if not cliente_db:
+        return {
+            "code": 404,
+            "message": "Cliente não encontrado",
+            "success": False
+        }
+    
+    id_endereco = cliente_db.codendereco
+    id_telefone = cliente_db.codtelefone
+    
+    if cliente_db.tipopessoa == 'F':
+        db.query(models.ClienteFisico).filter(models.ClienteFisico.codcli == cliente_id).delete()
+    elif cliente_db.tipopessoa == 'J':
+        db.query(models.ClienteJuridico).filter(models.ClienteJuridico.codcli == cliente_id).delete()  
+        
+    db.delete(cliente_db)
+    
+    db.flush()
+    
+    if id_endereco:
+        db.query(model_util.Endereco).filter(model_util.Endereco.codendereco == id_endereco).delete()
+    if id_telefone:
+        db.query(model_util.Contato).filter(model_util.Contato.codcontato == id_telefone).delete()
+    
+    db.commit()
+    
+    return {
+        "code": 200,
+        "message": "Cliente deletado com sucesso",
+        "success": True
     }
