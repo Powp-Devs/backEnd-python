@@ -1,6 +1,7 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
 from app.modules.clients.router import router as clients_router
+from app.modules.util import models as util_models
 
 #Importar o motor do banco
 from app.core.database import engine, Base
