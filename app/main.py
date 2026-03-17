@@ -1,13 +1,17 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
+
+#Importar os routers
 from app.modules.clients.router import router as clients_router
-from app.modules.util import models as util_models
+from app.modules.supplier.router import router as supplier_router
 
 #Importar o motor do banco
 from app.core.database import engine, Base
 
 #Importar as models 
 from app.modules.clients import models as clients_models
+from app.modules.util import models as util_models
+from app.modules.supplier import models as supplier_models
 
 Base.metadata.create_all(bind=engine)
 
@@ -27,6 +31,7 @@ app.add_middleware(
 
 # Incluir routers com prefixo /api
 app.include_router(clients_router, prefix="/api")
+app.include_router(supplier_router, prefix="/api")
 
 @app.get("/")
 def health_check():
