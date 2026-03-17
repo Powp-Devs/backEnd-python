@@ -21,3 +21,9 @@ def deletar_cliente(codcliente: int, db: Session = Depends(get_db)):
     sucesso = services.delete_cliente(db=db, cliente_id=codcliente)
 
     return sucesso
+
+@router.put("/update/{codcliente}")
+def update_client(codcliente: int, cliente: schemas.ClienteCreate, db: Session = Depends(get_db)):
+    cliente_atualizado = services.update_cliente(db=db, cliente_id=codcliente, cliente_dados=cliente)
+    
+    return cliente_atualizado
