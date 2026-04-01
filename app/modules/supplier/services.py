@@ -56,3 +56,41 @@ def create_fornecedor(db: Session, fornecedor: schemas_supplier.FornecedorCreate
     except Exception as e:
         db.rollback()
         raise e
+    
+def excluir_fornecedor(db: Session, codfornec: int):
+    try: 
+        fornecedor = db.query(models.Fornecedor).filter(models.Fornecedor.codfornecedor == codfornec).first()
+        
+        if fornecedor:
+            db.delete(fornecedor)
+            db.commit()
+            return {
+                "code": 200,
+                "message": "Fornecedor excluído com sucesso"
+            }
+        else:
+            return {
+                "code": 404,
+                "message": "Fornecedor não encontrado"
+            }
+    except Exception as e:
+        db.rollback()
+        raise e
+
+def list_fornecedor(db: Session, page: int = 1, per_page: int = 10):
+    
+    offset = (page - 1) * per_page
+    total_fornecedores = db.query(models.Fornecedor).count()
+    
+    fornecedores_db = db.query(models.Fornecedor).offset(offset).limit(per_page).all()
+    endereco_db = db.query(model_util.Endereco).all()
+    contato_db = db.query(model_util.Contato).all()
+
+    return {
+        "fornecedor": fornecedores_db, 
+        "endereco": endereco_db,
+        "contato": contato_db,
+        "total": total_fornecedores,
+        "page": page,
+        "per_page": per_page
+    }
