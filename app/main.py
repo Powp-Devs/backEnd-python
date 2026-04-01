@@ -17,7 +17,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="API do Powp - System Enterprise",
-    description="API para o sistema ERP voltado ao projeto final de curso",
+    description="API para o sistema erp POWP",
     version="1.0.0"
 )
 
