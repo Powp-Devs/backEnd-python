@@ -1,26 +1,25 @@
-from sqlalchemy import Column, Integer, String, Date, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Text, Numeric, ForeignKey
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
-class Endereco(Base):
-    __tablename__ = "pwendereco"
+class Empregado(Base):
+    __tablename__ = 'pwempregado'
 
-    codendereco = Column(Integer, primary_key=True, index=True)
+    codempregado = Column(Integer, primary_key=True, index=True)
 
-    logradouro = Column(String(255), nullable=False)
-    numero = Column(String(20))
-    cep = Column(String(10))
-    bairro = Column(String(100))
-    cidade = Column(String(100))
-    uf = Column(String(2))
-    pais = Column(String(2))
+    empregado = Column(String(255), nullable=False)
+    cpf = Column(String(14), unique=True, nullable=False)
+    rg = Column(String(20), unique=True)
+    data_nascimento = Column(Date)
+    data_admissao = Column(Date)
+    data_demissao = Column(Date, nullable=True)
+    email_corporativo = Column(String(255))
+    obs = Column(Text)
+    bloqueio = Column(String(1), default='N')
+    motivo_bloq = Column(String(255))
+    cargo = Column(String(100))
+    salario = Column(Numeric(12,2))
 
-class Contato(Base):
-    __tablename__ = "pwcontato"
-
-    codcontato = Column(Integer, primary_key=True, index=True)
-    telefone = Column(String(15))
-    celular = Column(String(15))
-    fax = Column(String(15))
-    email = Column(String(100))
-    email2 = Column(String(100), nullable=True)
+    codsetor = Column(Integer, ForeignKey("pwsetor.codsetor"))
+    codendereco = Column(Integer, ForeignKey("pwendereco.codendereco"))
+    codtelefone = Column(Integer, ForeignKey("pwcontato.codcontato"))
