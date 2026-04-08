@@ -10,7 +10,7 @@ db_user = os.getenv("DB_USER")
 db_password = os.getenv("DB_PASSWORD")
 db_name = os.getenv("DB_NAME")
 
-DATABASE_URL = f"postgresql://{db_user}:{db_password}@localhost:5432/{db_name}"
+DATABASE_URL = f"postgresql+pg8000://{db_user}:{db_password}@localhost:5433/{db_name}"
 
 engine = create_engine(DATABASE_URL)
 
