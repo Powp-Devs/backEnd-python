@@ -16,5 +16,5 @@ class ProdutoCreate(BaseModel):
     qtminima: int 
     
     #Campos PWTABPR
-    custo: float
+    preco_compra: float
     preco_venda: float

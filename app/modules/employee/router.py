@@ -8,4 +8,8 @@ router = APIRouter(prefix="/empregados", tags=["Rotas para os empregados"])
 
 @router.post("/cadastrar", summary="Rota para cadastrar um novo empregado", description="Rota que permite o usuário realize o cadastro de um novo empregado no sistema")
 def cadastro_employee(dados_empregado: schemas.EmpregadoCreate, db: Session = Depends(get_db)):
-    return services.create_empregrado(db=db, dados=dados_empregado)
+    return services.create_employee(db=db, dados=dados_empregado)
+
+@router.delete("deletar/{codempregado}")
+def delete(codempregado: int, db: Session = Depends(get_db)):
+    return services.delete_employee(db=db, codempregado=codempregado)
