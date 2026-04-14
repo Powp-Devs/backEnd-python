@@ -1,26 +1,51 @@
-from sqlalchemy import Column, Integer, String, Date, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Text, Boolean, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
+from datetime import datetime
 from app.core.database import Base
 
-class Endereco(Base):
-    __tablename__ = "pwendereco"
+class Produto(Base):
+    __tablename__ = "pwproduto"
 
-    codendereco = Column(Integer, primary_key=True, index=True)
+    codproduto = Column(Integer, primary_key=True, index=True)
 
-    logradouro = Column(String(255), nullable=False)
-    numero = Column(String(20))
-    cep = Column(String(10))
-    bairro = Column(String(100))
-    cidade = Column(String(100))
-    uf = Column(String(2))
-    pais = Column(String(2))
+    produto = Column(String(255), nullable=False)
+    sku = Column(String(20))
+    embalagem = Column(String(20))
+    unidade = Column(String(10))
+    ean = Column(String(20))
+    gtin = Column(String(10))
+    status = Column(String(1), default="A")
+    obs = Column(String(255))
+    dtcadastro = Column(datetime, default=datetime.now)
+    dtalteracao = Column(datetime, nullable=True)
 
-class Contato(Base):
-    __tablename__ = "pwcontato"
+    codfornecedor = Column(Integer, ForeignKey("pwfornecedor.codfornecedor"))
 
-    codcontato = Column(Integer, primary_key=True, index=True)
-    telefone = Column(String(15))
-    celular = Column(String(15))
-    fax = Column(String(15))
-    email = Column(String(100))
-    email2 = Column(String(100), nullable=True)
+class Preco(Base):
+    __tablename__ = "pwtabpr"
+
+    codpreco = Column(Integer, primary_key=True, index=True)
+
+    codproduto = Column(Integer, ForeignKey("pwproduto.codproduto"))
+    preco_custo = Column(Numeric(12,2))
+    preco_venda = Column(Numeric(12,2))
+    margem = Column(Numeric(12,2))
+    dtcadastro = Column(datetime, default=datetime.now)
+    dtalteracao = Column(datetime, nullable=False)
+    cod_func_alter = Column(Integer, nullable=False)
+
+
+class PrecoLog(Base):
+    __tablename__ = "pwtabpr_log"
+
+    codLog = Column(Integer, primary_key=True, index=True)
+
+    codproduto = Column(Integer)
+    custo_ant = Column(Numeric(12,2))
+    custo_new = Column(Numeric(12,2))
+    venda_ant = Column(Numeric(12,2))
+    venda_new = Column(Numeric(12,2))
+    margem_ant = Column(Numeric(12,2))
+    margem_new = Column(Numeric(12,2))
+    cod_func_alter = Column(Integer)
+    data = Column(datetime, default=datetime.now)
