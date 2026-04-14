@@ -15,11 +15,11 @@ class Produto(Base):
     ean = Column(String(20))
     gtin = Column(String(10))
     status = Column(String(1), default="A")
+    obs = Column(String(255))
     dtcadastro = Column(datetime, default=datetime.now)
-    dtalteracao = Column(datetime, nullable=False)
+    dtalteracao = Column(datetime, nullable=True)
 
     codfornecedor = Column(Integer, ForeignKey("pwfornecedor.codfornecedor"))
-    codpreco = Column(Integer, ForeignKey("pwtabpr.codpreco"))
 
 class Preco(Base):
     __tablename__ = "pwtabpr"
@@ -38,7 +38,9 @@ class Preco(Base):
 class PrecoLog(Base):
     __tablename__ = "pwtabpr_log"
 
-    codproduto = Column(Integer, ForeignKey('pwproduto.codprod'))
+    codLog = Column(Integer, primary_key=True, index=True)
+
+    codproduto = Column(Integer)
     custo_ant = Column(Numeric(12,2))
     custo_new = Column(Numeric(12,2))
     venda_ant = Column(Numeric(12,2))
