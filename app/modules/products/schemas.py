@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field, constr
-from datetime import date
+from pydantic import BaseModel, Field, constr
+from datetime import datetime
 from typing import Literal, Optional
+from decimal import Decimal
 
 class ProdutoCreate(BaseModel):
     #Campos PWPRODUTO
@@ -12,13 +13,9 @@ class ProdutoCreate(BaseModel):
     ean: str = Field(..., max_length=13)
     status: Literal['A', 'I']
     obs: Optional[str] = Field(None, max_length=255)
-    dtalteracao = Optional[date] = None
-
-    #Campos PWESTOQUE
-    qtest: int
-    qtbloqueada: int
-    qtminima: int 
+    codfornecedor: int 
     
     #Campos PWTABPR
-    custo: float
-    preco_venda: float
+    custo: Decimal
+    preco_venda: Decimal
+    margem: Decimal
