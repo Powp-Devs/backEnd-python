@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 from . import schemas as schemas_supplier, models as models
 from app.modules.util import schemas, models as model_util
 
@@ -55,7 +56,7 @@ def create_fornecedor(db: Session, fornecedor: schemas_supplier.FornecedorCreate
         
     except Exception as e:
         db.rollback()
-        raise e
+        raise HTTPException(status_code=501, detail=f"Erro ao cadastrar fornecedor. ERRO => {str(e)}")
     
 def excluir_fornecedor(db: Session, codfornec: int):
     try: 
