@@ -16,11 +16,26 @@ class Produto(Base):
     gtin = Column(String(10))
     status = Column(String(1), default="A")
     obs = Column(String(255))
-    dtcadastro = Column(DateTime, default=datetime.now)
+    dtcadastro = Column(DateTime, default=datetime.now())
     dtalteracao = Column(DateTime, nullable=True)
 
     codfornecedor = Column(Integer, ForeignKey("pwfornecedor.codfornecedor"), nullable=False)
     codpreco = Column(Integer, ForeignKey("pwtabpr.codpreco"))
+
+class ProdutoLog(Base):
+    __tablename__ = "pwlogproduto"
+    
+    cod_logproduto = Column(Integer, primary_key=True, index=True)
+
+    data = Column(DateTime, default=datetime.now())
+    codproduto = Column(Integer, nullable=False)
+    tipo = Column(String(20))
+    campo = Column(String(100), nullable=True)
+    valor_ant = Column(String(255), nullable=True)
+    valor_new = Column(String(255), nullable=True)
+    obs = Column(String(255), nullable=True)
+    cod_func_alter = Column(Integer)
+    
 
 class Preco(Base):
     __tablename__ = "pwtabpr"

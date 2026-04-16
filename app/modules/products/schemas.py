@@ -19,3 +19,12 @@ class ProdutoCreate(BaseModel):
     custo: Decimal
     preco_venda: Decimal
     margem: Decimal
+
+class ProdutoLogCreate(BaseModel):
+
+    codproduto: int
+    tipo: str = Field(..., max_length=20)
+    valor_ant: Optional[str] = Field(None, max_length=255)
+    valor_new: Optional[str] = Field(None, max_length=255)
+    obs: Optional[str] = Field(None, max_length=255)
+    cod_func_alter: int
