@@ -45,6 +45,22 @@ def create_product(db: Session, dados: schemas.ProdutoCreate):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=401, detail=f"Erro ao cadastrar um novo produto no sistema. ERRO => {str(e)}")
+
+def getProduct_paginate(db: Session, page: int = 1, per_page: int = 10):
+
+    offset = (page - 1) * per_page 
+    total_produtos = db.query(models.Produto).count()
+
+    produtos_db = db.query(models.Produto).offset(offset).limit(per_page).all()
+    
+    return {
+        "status": 200,
+        "message": "Listagem de produtos cadastrados",
+        "produtos": produtos_db,
+        "total": total_produtos,
+        "page": page,
+        "per_page": per_page
+    }
     
 #Ajustar o LOG de exclusão
 def delete_product(db: Session, dados: schemas.ProdutoLogCreate):
