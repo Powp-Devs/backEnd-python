@@ -57,6 +57,7 @@ class PrecoLog(Base):
     codLog = Column(Integer, primary_key=True, index=True)
 
     codproduto = Column(Integer)
+    codpreco = Column(Integer)
     custo_ant = Column(Numeric(12,2))
     custo_new = Column(Numeric(12,2))
     venda_ant = Column(Numeric(12,2))
