@@ -6,3 +6,4 @@ class Sector(Base):
 
     codsetor = Column(Integer, primary_key=True, index=True)
     setor = Column(String(255), nullable=False)
+    status = Column(String(1))

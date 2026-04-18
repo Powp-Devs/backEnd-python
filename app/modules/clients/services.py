@@ -94,7 +94,7 @@ def update_cliente(db: Session, cliente_id: int, cliente_dados: schemas.ClienteC
     
     if not cliente_db:
         return {
-            "code": 404,
+            "status": 404,
             "message": "Cliente não encontrado",
             "success": False
         }
@@ -157,7 +157,7 @@ def update_cliente(db: Session, cliente_id: int, cliente_dados: schemas.ClienteC
         db.refresh(cliente_db)
         
         return {
-            "code": 200,
+            "status": 200,
             "message":  "Cliente alterado com sucesso",
             "success": True,
             "data": cliente_db
