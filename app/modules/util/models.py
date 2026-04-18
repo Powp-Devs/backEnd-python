@@ -23,3 +23,16 @@ class Contato(Base):
     celular = Column(String(15))
     email = Column(String(100))
     email2 = Column(String(100), nullable=True)
+
+class LogAlteracao(Base):
+    __tablename__ = "pwlogalteracaodados"
+
+    codlog = Column(Integer, primary_key=True, index=True)
+    data = Column(Date)
+    codfunc
+    codigo_alter
+    tabela
+    coluna
+    valor_ant
+    valor_new
+    obs
