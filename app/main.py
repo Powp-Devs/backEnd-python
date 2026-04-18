@@ -41,6 +41,7 @@ app.include_router(sector_router, prefix="/api")
 app.include_router(products_router, prefix="/api")
 app.include_router(cobranca_router, prefix='/api')
 
+
 @app.get("/")
 def health_check():
     return{"status": "API online"}
