@@ -5,7 +5,7 @@ class Cobranca(Base):
     __tablename__ = 'pwcobranca'
 
     codcobranca = Column(Integer, primary_key=True, index=True)
-    setor = Column(String(255), nullable=False)
+    cobranca = Column(String(255), nullable=False)
     status = Column(String(1))
 
 class Plano(Base):

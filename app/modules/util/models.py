@@ -29,10 +29,10 @@ class LogAlteracao(Base):
 
     codlog = Column(Integer, primary_key=True, index=True)
     data = Column(Date)
-    codfunc
-    codigo_alter
-    tabela
-    coluna
-    valor_ant
-    valor_new
-    obs
+    codfunc = Column(Integer)
+    codigo_alter = Column(Integer)
+    tabela = Column(String(100))
+    coluna = Column(String(100))
+    valor_ant = Column(String(255))
+    valor_new = Column(String(255))
+    obs = Column(String(255))
