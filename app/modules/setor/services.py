@@ -23,7 +23,7 @@ def create_sector(db: Session, dados: schemas.SetorCreate):
 
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=401, detail=f"Erro ao cadastrar setor. ERRO => {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao cadastrar setor. ERRO => {str(e)}")
     
 def getSector_paginate(db: Session, page: int = 1, per_page: int = 10):
 
@@ -64,7 +64,7 @@ def inativar_sector(db: Session, codsetor: int):
         }
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=401, detail=f"Erro ao inativar o setor. ERRO => {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao inativar o setor. ERRO => {str(e)}")
 
 def delete_sector(db: Session, codsetor: int):
     try:

@@ -6,6 +6,10 @@ from . import schemas, models
 
 def create_employee(db: Session, dados: schemas.EmpregadoCreate):
     try:
+        if dados.salario <= 0:
+            db.rollback()
+            raise HTTPException(status_code=400, detail="O salário não pode ser menor ou igual a zero!")
+
         new_endereco = model_util.Endereco(
             logradouro = dados.logradouro,
             numero = dados.numero,
@@ -40,12 +44,10 @@ def create_employee(db: Session, dados: schemas.EmpregadoCreate):
             motivo_bloq = dados.motivo_bloq,
             cargo = dados.cargo,
             salario = dados.salario,
-            codsetor = dados.codsetor
+            codsetor = dados.codsetor,
+            codendereco = new_endereco.codendereco,
+            codtelefone = new_contato.codcontato
         )
-
-        if dados.salario <= 0:
-            db.rollback()
-            raise HTTPException(status_code=403, detail="O salário não pode ser menor ou igual a zero!")
 
         db.add(new_employee)
         db.flush()
@@ -58,9 +60,13 @@ def create_employee(db: Session, dados: schemas.EmpregadoCreate):
             "message": "Empregado cadastrado com sucesso",
             "data": new_employee
         }
+    except HTTPException:
+        db.rollback()
+        raise
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=401, detail=f"Erro ao cadastrar empregado. ERRO => {str(e)}")
+        print(f"Erro ao cadastrar empregado: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao cadastrar empregado. ERRO => {str(e)}")
     
 def getEmployee_paginate(db: Session, page: int = 1, per_page: int = 10):
     offset = (page - 1) * per_page
@@ -80,10 +86,27 @@ def getEmployee_paginate(db: Session, page: int = 1, per_page: int = 10):
         "per_page": per_page 
     }
 
+def get_employee_by_id(db: Session, codempregado: int):
+    employee_db = db.query(models.Empregado).filter(models.Empregado.codempregado == codempregado).first()
+    
+    if not employee_db:
+        raise HTTPException(status_code=404, detail="Empregado não encontrado")
+    
+    endereco = db.query(model_util.Endereco).filter(model_util.Endereco.codendereco == employee_db.codendereco).first() if employee_db.codendereco else None
+    contato = db.query(model_util.Contato).filter(model_util.Contato.codcontato == employee_db.codtelefone).first() if employee_db.codtelefone else None
+    
+    return {
+        "status": 200,
+        "data": {
+            **employee_db.__dict__,
+            "endereco": endereco.__dict__ if endereco else None,
+            "contato": contato.__dict__ if contato else None
+        }
+    }
 
-def delete_employee(db: Session, employee_id: int):
+def delete_employee(db: Session, codempregado: int):
 
-    employee_db = db.query(models.Empregado).filter(models.Empregado.codempregado == employee_id).first()
+    employee_db = db.query(models.Empregado).filter(models.Empregado.codempregado == codempregado).first()
 
     if not employee_db: 
         return {

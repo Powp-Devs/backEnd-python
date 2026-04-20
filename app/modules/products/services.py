@@ -44,15 +44,15 @@ def create_product(db: Session, dados: schemas.ProdutoCreate):
 
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=401, detail=f"Erro ao cadastrar um novo produto no sistema. ERRO => {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao cadastrar um novo produto no sistema. ERRO => {str(e)}")
 
 def getProduct_paginate(db: Session, page: int = 1, per_page: int = 10):
 
-    offset = (page - 1) * per_page 
+    offset = (page - 1) * per_page
     total_produtos = db.query(models.Produto).count()
 
     produtos_db = db.query(models.Produto).offset(offset).limit(per_page).all()
-    
+
     return {
         "status": 200,
         "message": "Listagem de produtos cadastrados",
@@ -61,7 +61,7 @@ def getProduct_paginate(db: Session, page: int = 1, per_page: int = 10):
         "page": page,
         "per_page": per_page
     }
-    
+
 def update_product(db: Session, codproduto: int, dados: schemas.ProdutoUpdate):
     produto_db = db.query(models.Produto).filter(models.Produto.codproduto == codproduto).first()
 
@@ -69,7 +69,7 @@ def update_product(db: Session, codproduto: int, dados: schemas.ProdutoUpdate):
         return {
             "status": 404,
             "message": "Produto não localizado",
-            "success": False            
+            "success": False
         }
 
     try:
@@ -93,11 +93,11 @@ def update_product(db: Session, codproduto: int, dados: schemas.ProdutoUpdate):
             "success": True,
             "data": produto_db
         }
-    
+
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Não foi possível atualizar o produto selecionado!")
-    
+
 def update_price(codproduto: int, dados: schemas.PrecoUpdate, db: Session):
     produto_db = db.query(models.Produto).filter(models.Produto.codproduto == codproduto).first()
 
@@ -105,9 +105,9 @@ def update_price(codproduto: int, dados: schemas.PrecoUpdate, db: Session):
         return {
             "status": 404,
             "message": "Produto não localizado",
-            "success": False            
+            "success": False
         }
-    
+
     codpreco = produto_db.codpreco
 
     preco_db = db.query(models.Preco).filter(models.Preco.codpreco == codpreco).first()
@@ -176,7 +176,7 @@ def delete_product(db: Session, dados: schemas.ProdutoLogCreate):
 
         db.delete()
         db.query(models.Preco).filter(models.Preco.codpreco == id_preco).delete()
-        
+
         db.flush()
         db.commit()
 
@@ -187,4 +187,4 @@ def delete_product(db: Session, dados: schemas.ProdutoLogCreate):
         }
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=401, detail=f"Erro ao excluir o produto. ERRO => {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao excluir o produto. ERRO => {str(e)}")
