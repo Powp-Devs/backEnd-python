@@ -8,6 +8,7 @@ from app.modules.employee.router import router as employee_router
 from app.modules.setor.router import router as sector_router
 from app.modules.products.router import router as products_router
 from app.modules.cobranca.router import router as cobranca_router
+#from app.modules.ai_assistent.router import router as ia_router
 
 #Importar o motor do banco
 from app.core.database import engine, Base
@@ -40,6 +41,7 @@ app.include_router(employee_router, prefix="/api")
 app.include_router(sector_router, prefix="/api")
 app.include_router(products_router, prefix="/api")
 app.include_router(cobranca_router, prefix='/api')
+#app.include_router(ia_router, prefix='/api')
 
 @app.get("/")
 def health_check():

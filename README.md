@@ -45,17 +45,22 @@
     pip install pg8000
     ```
 
-8. Instale o framework e o servidor
+8. Instalar o LangChain para conexão com a IA
+    ```bash
+    pip install langchain langchain-community langchain-openai
+    ```
+
+9. Instale o framework e o servidor
     ```bash
     pip install fastapi "uvicorn[standard]"
     ```
 
-9. Iniciar o servidor
+10. Iniciar o servidor
     ```bash
     uvicorn app.main:app --reload
     ```
 
-10. Acessar documentação API
+11. Acessar documentação API
     ```
     http://127.0.0.1:8000/docs
     ```
