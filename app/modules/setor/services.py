@@ -1,12 +1,15 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from datetime import datetime
 
 from . import schemas, models 
 
 def create_sector(db: Session, dados: schemas.SetorCreate):
     try:
         new_setor = models.Sector(
-            setor = dados.setor
+            setor = dados.setor,
+            status = dados.status,
+            dtcadastro = datetime.now()
         )
 
         db.add(new_setor)
