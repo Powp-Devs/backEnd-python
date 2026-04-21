@@ -104,6 +104,79 @@ def get_employee_by_id(db: Session, codempregado: int):
         }
     }
 
+def update_employee(db: Session, codempregado: int, dados: schemas.EmpregadoUpdate):
+    empregado_db = db.query(models.Empregado).filter(models.Empregado.codempregado == codempregado).first()
+
+    if not empregado_db:
+        return {
+            "status": 404,
+            "message": "Funcionário não localizado",
+            "success": False
+        }
+
+    try:
+        empregado_db.empregado = dados.empregado,
+        empregado_db.cpf = dados.cpf,
+        empregado_db.rg = dados.rg,
+        empregado_db.data_nascimento = dados.data_nascimento,
+        empregado_db.data_admissao = dados.data_admissao,
+        empregado_db.data_demissao = dados.data_demissao,
+        empregado_db.email_corporativo = dados.email_corporativo,
+        empregado_db.obs = dados.obs,
+        empregado_db.bloqueio = dados.bloqueio,
+        empregado_db.motivo_bloq = dados.motivo_bloq,
+        empregado_db.cargo = dados.cargo,
+        empregado_db.salario = dados.salario,
+        empregado_db.codsetor = dados.codsetor,
+        empregado_db.codendereco = dados.codendereco,
+        empregado_db.codtelefone = dados.codcontato
+
+        if empregado_db.codendereco:
+            endereco_db = db.query(model_util.Endereco).filter(model_util.Endereco.codendereco == empregado_db.codendereco).first()
+            if endereco_db:
+                endereco_db.logradouro = dados.logradouro
+                endereco_db.numero = dados.numero
+                endereco_db.cep = dados.cep
+                endereco_db.bairro = dados.bairro
+                endereco_db.cidade = dados.cidade
+                endereco_db.uf = dados.uf
+                endereco_db.pais = dados.pais
+        else:
+            return {
+                "code": 404,
+                "message": "Endereço não encontrado",
+                "success": False
+            }
+
+        if empregado_db.codtelefone:
+            contato_db = db.query(model_util.Contato).filter(model_util.Contato.codcontato == empregado_db.codtelefone).first()
+            if contato_db:
+                contato_db.telefone = dados.telefone
+                contato_db.celular = dados.celular
+                contato_db.email = dados.email
+                if hasattr(dados, 'email2'):
+                    contato_db.email2 = dados.email2
+        else: 
+            return {
+                "code": 404,
+                "message": "Contato não encontrado",
+                "success": False
+            }
+        
+        db.commit()
+        db.refresh(empregado_db)
+
+        return {
+            "status": 201,
+            "message": "Funcionário atualizado com sucesso",
+            "success": True,
+            "data": empregado_db
+        }
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar o cliente. ERRO => {str(e)}")
+
 def delete_employee(db: Session, codempregado: int):
 
     employee_db = db.query(models.Empregado).filter(models.Empregado.codempregado == codempregado).first()
