@@ -95,3 +95,45 @@ def list_fornecedor(db: Session, page: int = 1, per_page: int = 10):
         "page": page,
         "per_page": per_page
     }
+
+def update_fornecedor(db: Session, codfornec: int, fornecedor_update: schemas_supplier.FornecedorUpdate):
+    try:
+        fornecedor = db.query(models.Fornecedor).filter(models.Fornecedor.codfornecedor == codfornec).first()
+        
+        if not fornecedor:
+            return {
+                "code": 404,
+                "message": "Fornecedor não encontrado"
+            }
+        
+        update_data = fornecedor_update.dict(exclude_unset=True)
+        for key, value in update_data.items():
+            if hasattr(fornecedor, key):
+                setattr(fornecedor, key, value)
+        
+        if fornecedor.codendereco:
+            endereco = db.query(model_util.Endereco).filter(model_util.Endereco.codendereco == fornecedor.codendereco).first()
+            if endereco:
+                endereco_data = {k: v for k, v in update_data.items() if k in ['cep', 'logradouro', 'numero', 'bairro', 'cidade', 'uf', 'pais']}
+                for key, value in endereco_data.items():
+                    setattr(endereco, key, value)
+        
+        if fornecedor.codtelefone:
+            contato = db.query(model_util.Contato).filter(model_util.Contato.codcontato == fornecedor.codtelefone).first()
+            if contato:
+                contato_data = {k: v for k, v in update_data.items() if k in ['telefone', 'celular', 'email', 'email2']}
+                for key, value in contato_data.items():
+                    setattr(contato, key, value)
+        
+        db.commit()
+        db.refresh(fornecedor)
+        
+        return {
+            "code": 200,
+            "message": "Fornecedor atualizado com sucesso",
+            "data": fornecedor
+        }
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=501, detail=f"Erro ao atualizar fornecedor. ERRO => {str(e)}")
