@@ -18,6 +18,10 @@ def obter_empregado(codempregado: int, db: Session = Depends(get_db)):
 def cadastro_employee(dados_empregado: schemas.EmpregadoCreate, db: Session = Depends(get_db)):
     return services.create_employee(db=db, dados=dados_empregado)
 
+@router.put("/{codempregado}", summary="Rota para atualizar o empregado", description="Rota solicita dados para realizaer a atualização cadastral de um funcionário")
+def atualizar_funcionario(codempregado: int, dados: schemas.EmpregadoCreate, db: Session = Depends(get_db)):
+    return services.update_employee(db=db, codempregado=codempregado, dados=dados)
+
 @router.delete("/{codempregado}", summary="Deletar um empregado")
 def delete(codempregado: int, db: Session = Depends(get_db)):
     return services.delete_employee(db=db, codempregado=codempregado)
