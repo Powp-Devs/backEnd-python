@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
+from datetime import datetime
 from app.core.database import Base
 
 class Cobranca(Base):
@@ -7,12 +8,15 @@ class Cobranca(Base):
     codcobranca = Column(Integer, primary_key=True, index=True)
     cobranca = Column(String(255), nullable=False)
     status = Column(String(1))
+    dtcadastro = Column(DateTime, default=datetime.now())
 
 class Plano(Base):
     __tablename__ = 'pwplanopagamento'
 
     codplano = Column(Integer, primary_key=True, index=True)
     plano = Column(String(255), nullable=False)
+    dtcadastro = Column(DateTime, default=datetime.now())
+    status = Column(String(1))
     numdias = Column(Integer)
     prazo1 = Column(Integer)
     prazo2 = Column(Integer)
