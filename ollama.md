@@ -16,5 +16,11 @@ ollama run phi
 
 Rodar o mistral
 ```bash
-ollama run phi
+ollama run mistral
+```
+
+Melhor modelo até o momento
+Rodar o mistral
+```bash
+ollama run qwen2.5:3b
 ```
