@@ -20,7 +20,7 @@ ollama run mistral
 ```
 
 Melhor modelo até o momento
-Rodar o mistral
+Rodar o qwen2.5
 ```bash
 ollama run qwen2.5:3b
 ```

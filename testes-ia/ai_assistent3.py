@@ -18,12 +18,11 @@ class ERPAssistent:
                 "pwplanopagamento",
                 "pwcobranca",
                 "pwempregado",
-                "pwtabpr"
+                "pwtabpr",
+                "pwsetor"
             ]
         )
 
-
-        # usando 3B para seus testes
         self.llm = ChatOllama(
             model="qwen2.5:3b",
             temperature=0
@@ -48,10 +47,9 @@ class ERPAssistent:
             - Nunca estime resultados. Use apenas dados reais.
             - Nunca use LIMIT 5 a menos que o usuário peça "os 5 melhores".
             - Nunca retorne uma query SQL sempre o valor solicitado.
+            - Nunca retorne uma query sql e sim somente o resultado.
         """
 
-
-        # usa create_sql_agent normal
         self.agent = create_sql_agent(
             llm=self.llm,
             db=self.db,
@@ -62,9 +60,8 @@ class ERPAssistent:
         )
 
 
-    # ---------------------
-    # consultas críticas
-    # ---------------------
+
+    # consultas exemplo - retirar depois ou não
 
     def contar_produtos(self):
         resultado = self.db.run("SELECT COUNT(*) FROM pwproduto")
@@ -78,7 +75,6 @@ class ERPAssistent:
     def perguntar(self, pergunta_usuario):
         pergunta = pergunta_usuario.lower()
 
-        # ROTAS DETERMINÍSTICAS (Resposta instantânea, zero uso do LLM)
         if "quantos produtos" in pergunta or "total de produtos" in pergunta:
             total = self.contar_produtos()
             return f"Existem {total} produtos cadastrados no sistema."
@@ -87,7 +83,6 @@ class ERPAssistent:
             total = self.contar_planos()
             return f"Existem {total} planos de pagamento cadastrados."
 
-        # PERGUNTAS ABERTAS (Cai no Agente)
         try:
             resposta = self.agent.invoke({"input": pergunta_usuario})
             return resposta["output"]
