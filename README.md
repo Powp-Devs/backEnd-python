@@ -55,12 +55,22 @@
     pip install fastapi "uvicorn[standard]"
     ```
 
-10. Iniciar o servidor
+10. Criar as máquinas virtuas do PostegreSQL no docker
+    ```bash
+    docker compose up -d
+    ```
+
+11. Iniciar o servidor
     ```bash
     uvicorn app.main:app --reload
     ```
 
-11. Acessar documentação API
+12. Acessar documentação API
     ```
     http://127.0.0.1:8000/docs
+    ```
+
+13. Instalar o Pytest
+    ```bash
+    pip install pytest
     ```

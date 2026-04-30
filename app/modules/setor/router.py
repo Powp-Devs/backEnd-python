@@ -10,7 +10,7 @@ router = APIRouter(prefix="/setor", tags=["Rotas para os setores da empresa"])
 def listar_setor_paginate(page: int = 1, per_page: int = 10, db: Session = Depends(get_db)):
     return services.getSector_paginate(db=db, page=page, per_page=per_page)
 
-@router.post("/cadastrar", summary="Rota para cadastrar um novo setor da empresa", description="tyeste")
+@router.post("/cadastrar", status_code=status.HTTP_201_CREATED, summary="Rota para cadastrar um novo setor da empresa", description="tyeste")
 def cadastrar_setor(dados_setor: schemas.SetorCreate, db: Session = Depends(get_db)):
     return services.create_sector(db=db, dados=dados_setor)
 
