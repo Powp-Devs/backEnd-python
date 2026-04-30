@@ -8,4 +8,4 @@ class Sector(Base):
     codsetor = Column(Integer, primary_key=True, index=True)
     setor = Column(String(255), nullable=False)
     status = Column(String(1))
-    dtcadastro = Column(DateTime, default=datetime.now())
+    dtcadastro = Column(DateTime, default=datetime.now)

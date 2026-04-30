@@ -69,3 +69,8 @@
     ```
     http://127.0.0.1:8000/docs
     ```
+
+13. Instalar o Pytest
+    ```bash
+    pip install pytest
+    ```
